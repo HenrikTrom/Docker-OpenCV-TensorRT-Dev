@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Docker-OpenCV-TensorRT-Dev"
+version: 1.0.0
+doi: 10.5281/zenodo.15526573
+date-released: 2025-05-27
+license: CC0-1.0 
+url: https://github.com/HenrikTrom/Docker-OpenCV-TensorRT-Dev
+repository-code: https://github.com/HenrikTrom/Docker-OpenCV-TensorRT-Dev
+abstract: "Customizable Docker container with support for CUDA, cuDNN, TensorRT, OpenCV, and CMake — tailored for efficient deployment and development on NVIDIA GPUs."
+authors:
+  - family-names: Trommer
+    given-names: Henrik
+    orcid: https://orcid.org/0009-0002-3110-0963
+    affiliation: University of Göttingen
+keywords:
+  - docker
+  - dev-ops
+  - tensorrt
+  - computer-vision
+  - inference
+  - research-software
+  - open-source
