@@ -1,0 +1,12 @@
+[submodule "modules/tensorrt-cpp-api"]
+	path = modules/tensorrt-cpp-api
+	url = git@github.com:HenrikTrom/tensorrt-cpp-api.git
+[submodule "modules/cpp_utils"]
+	path = modules/cpp_utils
+	url = git@github.com:HenrikTrom/cpp_utils.git
+[submodule "modules/pose_inference"]
+	path = modules/pose_inference
+	url = https://github.com/HenrikTrom/pose_inference
+[submodule "modules/detection_inference"]
+	path = modules/detection_inference
+	url = git@github.com:HenrikTrom/detection_inference.git

@@ -1,0 +1,27 @@
+{
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "${default}",
+                "limitSymbolsToIncludedHeaders": false
+            },
+            "includePath": [
+                "${workspaceFolder}/include/**",
+                "${workspaceFolder}/cpp-utils/**",
+                "${workspaceFolder}/tensorrt-cpp-api/**",
+                "${workspaceFolder}/detection-inference/**",
+                "${workspaceFolder}/pose-inference/**",
+                "/usr/local/include/**",
+                "/usr/local/include/opencv4",
+                "/usr/include/eigen3/",
+                "/opt/vision_dependencies/tensorrt/TensorRT-${TENSORRT_VERSION}/include/**"
+            ],
+            "name": "Modules-Development",
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}
