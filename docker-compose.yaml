@@ -1,0 +1,39 @@
+services:
+  opencv-tensorrt-dev:
+    container_name: ${TAG1}
+    build:
+      context: ./build
+      args:
+        UBUNTU_IMAGE_VERSION: ${UBUNTU_IMAGE_VERSION}
+        CUDA_VERSION: ${CUDA_VERSION}
+        TENSORRT_VERSION: ${TENSORRT_VERSION}
+        CUDA_ARCH_BIN: ${CUDA_ARCH_BIN}
+        OPENCV_VERSION: ${OPENCV_VERSION}
+        UID: ${UID}
+        GID: ${GID}
+        CMAKE_VERSION: ${CMAKE_VERSION}
+        CPP_OPTIMIZATIONS: ${CPP_OPTIMIZATIONS}
+    image: my/${TAG1}
+
+    command: tail -f /dev/null
+    tty: true
+    runtime: nvidia
+    
+    environment:
+      - DISPLAY=$DISPLAY
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - TERM=xterm-256color
+      - DEBUG_COLORS=true
+      - COLORTERM=truecolor
+    volumes: 
+      - ./:/home/docker/workspace
+      - /etc/timezone:/etc/timezone:ro
+    
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu, video, compute, utility]
