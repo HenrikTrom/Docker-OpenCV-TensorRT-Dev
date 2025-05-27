@@ -1,5 +1,7 @@
 # 🐳 TRT-OpenCV-Dev
 
+[![DOI](https://zenodo.org/badge/991382949.svg)](https://zenodo.org/badge/latestdoi/991382949)
+
 **A [Docker](https://docs.docker.com/engine/install/ubuntu/) development environment for building high-performance C++ modules with [TensorRT](https://developer.nvidia.com/tensorrt) and [OpenCV](https://opencv.org/).**
 
 Customizable Docker container with support for CUDA, cuDNN, TensorRT, OpenCV, and CMake — tailored for efficient deployment and development on NVIDIA GPUs.
