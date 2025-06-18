@@ -8,10 +8,10 @@
 
 
         {
-            "name": "Detection-Inference",
+            "name": "detection_inference",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/detection-inference/build/inference_benchmark",
+            "program": "${workspaceFolder}/detection_inference/build/inference_benchmark",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
@@ -32,10 +32,10 @@
             ]
         },    
         {
-            "name": "Detection-Inference-Video",
+            "name": "detection_inference-Video",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/detection-inference/build/video_inference_export",
+            "program": "${workspaceFolder}/detection_inference/build/video_inference_export",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
@@ -56,10 +56,10 @@
             ]
         },
         {
-            "name": "Detection-Inference-Overlay",
+            "name": "detection_inference-Overlay",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/detection-inference/build/bbox_overlay",
+            "program": "${workspaceFolder}/detection_inference/build/bbox_overlay",
             "args": ["test1"],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
@@ -80,10 +80,10 @@
             ]
         },  
         {
-            "name": "Pose-Inference",
+            "name": "pose_inference",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/pose-inference/build/inference_benchmark",
+            "program": "${workspaceFolder}/pose_inference/build/inference_benchmark",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
@@ -104,10 +104,10 @@
             ]
         },
         {
-            "name": "Pose-Inference-Video",
+            "name": "pose_inference-Video",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/pose-inference/build/video_inference_export",
+            "program": "${workspaceFolder}/pose_inference/build/video_inference_export",
             "args": ["1-mp4"],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
@@ -128,10 +128,34 @@
             ]
         },
         {
-            "name": "Pose-Inference-Overlay",
+            "name": "pose_inference-Overlay",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/pose-inference/build/keypoint_overlay",
+            "program": "${workspaceFolder}/pose_inference/build/keypoint_overlay",
+            "args": ["1-mp4"],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "pose_inference-Debug",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/pose_inference/build/debug",
             "args": ["1-mp4"],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
@@ -151,6 +175,5 @@
                 }
             ]
         }
-
     ]
 }
