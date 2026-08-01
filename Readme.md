@@ -17,6 +17,7 @@ Clone the repository and initialize submodules:
 
 ```bash
 git clone --recurse-submodules https://github.com/HenrikTrom/Docker-OpenCV-TensorRT-Dev
+cd Docker-OpenCV-TensorRT-Dev
 git submodule update --init --remote --recursive
 ````
 
