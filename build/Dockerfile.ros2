@@ -1,0 +1,67 @@
+ARG BASE_DEV_IMAGE
+FROM ${BASE_DEV_IMAGE}
+
+SHELL ["/bin/bash","-c"]
+
+USER root
+
+ARG ROS_DISTRO=jazzy
+ENV ROS_DISTRO=${ROS_DISTRO}
+ENV ROS_WS=/home/docker/ros2_ws
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+
+# Install ROS 2 Jazzy and common image transport dependencies on Ubuntu 24.04.
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    locales \
+    curl \
+    software-properties-common && \
+    locale-gen en_US en_US.UTF-8 && \
+    update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 && \
+    add-apt-repository universe && \
+    export ROS_APT_SOURCE_VERSION="$(curl -s https://api.github.com/repos/ros-infrastructure/ros-apt-source/releases/latest | grep -F 'tag_name' | awk -F'\"' '{print $4}')" && \
+    curl -L -o /tmp/ros2-apt-source.deb \
+    "https://github.com/ros-infrastructure/ros-apt-source/releases/download/${ROS_APT_SOURCE_VERSION}/ros2-apt-source_${ROS_APT_SOURCE_VERSION}.$(. /etc/os-release && echo ${UBUNTU_CODENAME:-${VERSION_CODENAME}})_all.deb" && \
+    dpkg -i /tmp/ros2-apt-source.deb && \
+    rm /tmp/ros2-apt-source.deb && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+    ros-${ROS_DISTRO}-desktop \
+    ros-${ROS_DISTRO}-std-msgs \
+    ros-${ROS_DISTRO}-sensor-msgs \
+    ros-${ROS_DISTRO}-image-transport \
+    ros-${ROS_DISTRO}-image-transport-plugins \
+    ros-${ROS_DISTRO}-camera-info-manager \
+    libboost-python-dev \
+    python3-numpy \
+    python3-colcon-common-extensions \
+    python3-rosdep \
+    python3-vcstool \
+    ros-dev-tools && \
+    rosdep init && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN rosdep update && \
+    mkdir -p "${ROS_WS}/src" && \
+    chown -R docker:docker /home/docker
+
+RUN git clone --branch "${ROS_DISTRO}" --depth 1 \
+    https://github.com/ros-perception/vision_opencv.git \
+    "${ROS_WS}/src/vision_opencv" && \
+    chown -R docker:docker "${ROS_WS}"
+
+RUN source /opt/ros/${ROS_DISTRO}/setup.bash && \
+    opencv_dir="$(find /usr/local -path '*/opencv4/OpenCVConfig.cmake' -printf '%h\n' -quit)" && \
+    test -n "${opencv_dir}" && \
+    cd "${ROS_WS}" && \
+    colcon build --symlink-install \
+    --packages-up-to cv_bridge \
+    --cmake-args "-DOpenCV_DIR=${opencv_dir}"
+
+RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /home/docker/.bashrc && \
+    echo "if [ -f ${ROS_WS}/install/setup.bash ]; then source ${ROS_WS}/install/setup.bash; fi" >> /home/docker/.bashrc
+
+WORKDIR /home/docker/ros2_ws
+
+USER docker

@@ -2,7 +2,6 @@ ARG UBUNTU_IMAGE_VERSION
 ARG CUDA_VERSION=12.3
 
 FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu${UBUNTU_IMAGE_VERSION} AS opencv_trt_dev
-
 LABEL maintainer="Henrik Trommer <henrik.trommer@uni-goettingen.de>"
 
 SHELL ["/bin/bash","-c"]
@@ -41,23 +40,6 @@ RUN apt update && apt install --no-install-recommends -y \
     tree nano libeigen3-dev
 
 ################################################################
-## Python Environment Setup
-################################################################
-
-# Install Python and pip
-RUN apt update && apt install --no-install-recommends -y \
-    python3 \
-    python3-pip
-
-# Install core AI/ML and inference libraries
-RUN pip install ultralytics onnx onnxruntime-gpu
-
-# Install numerical and visualization packages
-RUN pip3 install numpy==1.24.4 scipy pandas tqdm seaborn python-chess cairosvg
-RUN pip3 install opencv-contrib-python
-RUN pip3 install scikit-learn scikit-image matplotlib pillow jsonpickle rich
-
-################################################################
 ## X11 and debugging utilities
 ################################################################
 
@@ -67,7 +49,7 @@ RUN apt-get update -y && apt-get install -y \
 
 # Install multimedia, JSON, debugging, and system tools
 RUN apt -y install ffmpeg libavdevice-dev rapidjson-dev gdb
-RUN apt -y install zlib1g unzip mlocate
+RUN apt -y install zlib1g unzip plocate
 RUN apt -y install usbutils pciutils htop iputils-ping
 
 # Install sudo for non-root user
@@ -116,10 +98,11 @@ ENV CPP_OPTIMIZATIONS=${CPP_OPTIMIZATIONS}
 # Copy and install vision-related dependencies (OpenCV, TensorRT, cuDNN)
 RUN mkdir /opt/vision_dependencies
 # Install cuDNN
-RUN apt install -y libcudnn8 libcudnn8-dev
-# RUN if [[ "$TENSORRT_VERSION" == 8* ]]; then apt install -y libcudnn8 libcudnn8-dev; \
-#     else apt install -y libcudnn9 libcudnn9-dev; \
-#     fi
+RUN cuda_major="${CUDA_VERSION%%.*}" && \
+    apt-get update && \
+    apt-get install -y \
+    "libcudnn9-cuda-${cuda_major}" \
+    "libcudnn9-dev-cuda-${cuda_major}"
 ################################################################
 # OpenCV and TensorRT Installation
 ################################################################
@@ -145,6 +128,28 @@ RUN rm /etc/apt/apt.conf.d/docker-clean &&\
 RUN echo 'set completion-ignore-case On' >> /etc/inputrc
 
 ################################################################
+## Python Environment Setup
+################################################################
+
+# Install Python and pip
+RUN apt update && apt install --no-install-recommends -y \
+    python3 \
+    python3-pip \
+    python3-venv
+
+ENV VIRTUAL_ENV=/opt/venv
+ENV PATH="${VIRTUAL_ENV}/bin:${PATH}"
+
+# Install Python packages in an isolated venv to avoid Ubuntu's externally-managed system Python
+RUN python3 -m venv "${VIRTUAL_ENV}" && \
+    pip install --upgrade pip setuptools wheel && \
+    pip install \
+    ultralytics onnx onnxruntime-gpu \
+    numpy==1.26.4 scipy pandas tqdm seaborn \
+    opencv-contrib-python \
+    scikit-learn scikit-image matplotlib pillow jsonpickle rich
+
+################################################################
 ## Final Setup: User Environment and Permissions
 ################################################################
 
@@ -165,5 +170,4 @@ RUN rm -rf /usr/lib/x86_64-linux-gnu/cmake/opencv4/
 # Update file search database
 RUN updatedb
 
-# Switch to non-root user
 USER docker

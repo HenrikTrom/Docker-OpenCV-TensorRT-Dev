@@ -1,6 +1,7 @@
 services:
   opencv-tensorrt-dev:
     container_name: ${TAG1}
+    platform: linux/amd64
     build:
       context: ./build
       args:
@@ -17,23 +18,45 @@ services:
 
     command: tail -f /dev/null
     tty: true
-    runtime: nvidia
-    
+
+    gpus: all
+
     environment:
-      - DISPLAY=$DISPLAY
+      - DISPLAY=${DISPLAY}
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=all
       - TERM=xterm-256color
       - DEBUG_COLORS=true
       - COLORTERM=truecolor
-    volumes: 
+
+    volumes:
       - ./:/home/docker/workspace
       - /etc/timezone:/etc/timezone:ro
-    
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu, video, compute, utility]
+
+  # opencv-tensorrt-ros2-dev:
+  #   container_name: ${TAG2}
+  #   platform: linux/amd64
+  #   build:
+  #     context: ./build
+  #     dockerfile: Dockerfile.ros2
+  #     args:
+  #       BASE_DEV_IMAGE: my/${TAG1}
+  #       ROS_DISTRO: ${ROS_DISTRO}
+  #   image: my/${TAG2}
+
+  #   command: tail -f /dev/null
+  #   tty: true
+
+  #   gpus: all
+
+  #   environment:
+  #     - DISPLAY=${DISPLAY}
+  #     - NVIDIA_VISIBLE_DEVICES=all
+  #     - NVIDIA_DRIVER_CAPABILITIES=all
+  #     - TERM=xterm-256color
+  #     - DEBUG_COLORS=true
+  #     - COLORTERM=truecolor
+
+  #   volumes:
+  #     - ./:/home/docker/workspace
+  #     - /etc/timezone:/etc/timezone:ro
