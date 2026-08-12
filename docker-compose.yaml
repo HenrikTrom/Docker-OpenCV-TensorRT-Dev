@@ -31,6 +31,7 @@ services:
 
     volumes:
       - ./:/home/docker/workspace
+      - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
 
   # opencv-tensorrt-ros2-dev:
