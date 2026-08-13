@@ -20,6 +20,14 @@ services:
     tty: true
 
     gpus: all
+    # Explicit device nodes mitigate the known Docker/runc/systemd-cgroup case
+    # where long-running containers can lose GPU access after container updates.
+    devices:
+      - /dev/nvidia0:/dev/nvidia0
+      - /dev/nvidiactl:/dev/nvidiactl
+      - /dev/nvidia-uvm:/dev/nvidia-uvm
+      - /dev/nvidia-uvm-tools:/dev/nvidia-uvm-tools
+      - /dev/nvidia-modeset:/dev/nvidia-modeset
 
     environment:
       - DISPLAY=${DISPLAY}
@@ -49,6 +57,12 @@ services:
   #   tty: true
 
   #   gpus: all
+  #   devices:
+  #     - /dev/nvidia0:/dev/nvidia0
+  #     - /dev/nvidiactl:/dev/nvidiactl
+  #     - /dev/nvidia-uvm:/dev/nvidia-uvm
+  #     - /dev/nvidia-uvm-tools:/dev/nvidia-uvm-tools
+  #     - /dev/nvidia-modeset:/dev/nvidia-modeset
 
   #   environment:
   #     - DISPLAY=${DISPLAY}

@@ -12,7 +12,11 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/detection_inference/build/inference_benchmark",
-            "args": [],
+            "args": [
+                "${workspaceFolder}/detection_inference/inputs", 
+                "${workspaceFolder}/detection_inference/outputs",
+                "${workspaceFolder}/detection_inference/cfg/yolo_default_config.json"
+            ],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],
